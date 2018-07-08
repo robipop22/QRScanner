@@ -3,8 +3,9 @@ import {
   StyleSheet,
   View,
 	Text,
-	LayoutAnimation,
-	Dimensions
+	AsyncStorage,
+	Dimensions,
+	ActivityIndicator
 } from 'react-native';
 
 import { BarCodeScanner, Permissions, Constants } from 'expo'
@@ -22,7 +23,9 @@ export default class HomeScreen extends React.Component {
 			hasCameraPermission: null,
 			data: [],
 			scan: false,
-			errMessage: null
+			errMessage: null,
+			stores: [],
+			isLoading: true
 		}
 	}
 	
@@ -32,6 +35,13 @@ export default class HomeScreen extends React.Component {
 	
 	componentDidMount() {
 		this.requestCameraPermission()
+		AsyncStorage.getItem('storeData')
+			.then( stores => {
+				this.setState({stores: stores ? JSON.parse(stores) : [], isLoading: false})
+			})
+			.catch( err => {
+				this.setState({stores: []})
+			})
 	}
 	
 	requestCameraPermission = async () => {
@@ -51,11 +61,15 @@ export default class HomeScreen extends React.Component {
 	
 	renderData = () => {
 		const {data} = this.state
-		const { order_name, products } = data
+		const { order_name, products, customer, order_value } = data
 		if ( order_name && products ) {
 			return (
 				<View style={{flex: 1, marginTop: 30}}>
-					<Text style={{marginBottom: 15, fontSize: 16}}>{order_name}</Text>
+					<Text style={{marginBottom: 15, fontSize: 20, fontWeight: 'bold'}}>{order_name}</Text>
+					<View style={styles.headerContainer}>
+						<Text style={{fontSize: 16, marginLeft: 20, flex: 1, fontWeight: 'bold'}}>{customer}</Text>
+						<Text style={{fontSize: 16, marginRight: 20, fontWeight: 'bold', color: '#96be4f'}}>{order_value}</Text>
+					</View>
 					{
 						products.map( (item, index) =>
 							<Text
@@ -77,19 +91,30 @@ export default class HomeScreen extends React.Component {
 	}
 	
 	getData = code => {
-		promiseRequest('GET', Api(code))
+		const filteredObj = this.state.stores.filter( obj => obj.active)
+		const { domain, apiKey, apiPass } = filteredObj[0]
+		console.log('Api', Api(domain, apiKey, apiPass, code))
+		promiseRequest('GET', Api(domain, apiKey, apiPass, code))
 			.then( resp => {
+				console.log(resp)
 				this.setState({
 					data: resp,
 					scan: false
 				})
 			})
 			.catch( err => {
-			
+				console.log('err', err)
 			})
 	}
 
   render() {
+	  if ( this.state.isLoading ) {
+		  return (
+			  <View style={{flex: 1, paddingTop: 20}}>
+				  <ActivityIndicator />
+			  </View>
+		  )
+	  }
     return (
       <View style={styles.container}>
 	      {
@@ -104,35 +129,37 @@ export default class HomeScreen extends React.Component {
 		      :
 			      null
 	      }
-        <Button
-	        containerViewStyle={styles.buttonContainer}
-	        textStyle={{color: '#FFF'}}
-	        backgroundColor={'#96be4f'}
-	        rightIcon={{type: 'material-community',name: 'qrcode'}}
-	        title='Scan'
-	        onPress={this.startScanning}/>
-	      {
-		      this.state.scan ?
-			      <View>
-				      <BarCodeScanner
-					      onBarCodeRead={this.scanCode}
-					      style={{
-					        flex: 1,
-						      height: Dimensions.get('window').height,
-						      width: Dimensions.get('window').width,
-					      }}
-				      />
-				      <Button
-					      containerViewStyle={[styles.buttonContainer, {bottom: 100}]}
-					      textStyle={{color: '#FFF'}}
-					      backgroundColor={'#f44336'}
-					      rightIcon={{type: 'material-community',name: 'cancel'}}
-					      title='Cancel'
-					      onPress={this.cancelScan}/>
-			      </View>
-		      :
-	          null
-	      }
+	      <View style={styles.btnContainer}>
+	        <Button
+		        containerViewStyle={styles.buttonContainer}
+		        textStyle={{color: '#FFF'}}
+		        backgroundColor={'#96be4f'}
+		        rightIcon={{type: 'material-community',name: 'qrcode'}}
+		        title='Scan'
+		        onPress={this.startScanning}/>
+		      {
+			      this.state.scan ?
+				      <View style={styles.btnContainer}>
+					      <BarCodeScanner
+						      onBarCodeRead={this.scanCode}
+						      style={{
+						        flex: 1,
+							      height: Dimensions.get('window').height,
+							      width: Dimensions.get('window').width,
+						      }}
+					      />
+					      <Button
+						      containerViewStyle={[styles.buttonContainer]}
+						      textStyle={{color: '#FFF'}}
+						      backgroundColor={'#f44336'}
+						      rightIcon={{type: 'material-community',name: 'cancel'}}
+						      title='Cancel'
+						      onPress={this.cancelScan}/>
+				      </View>
+			      :
+		          null
+		      }
+	      </View>
       </View>
     )
   }
@@ -142,7 +169,6 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-	  alignItems: 'center',
 	  paddingTop: Constants.statusBarHeight,
 	  backgroundColor: '#ecf0f1',
   },
@@ -150,7 +176,18 @@ const styles = StyleSheet.create({
   	height: 50,
 		width: 100,
 		position: 'absolute',
-		alignSelf: 'center',
 		bottom: 50
-	}
+	},
+	btnContainer: {
+  	flex: 1,
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	headerContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 50,
+		marginBottom: 30
+	},
 });
