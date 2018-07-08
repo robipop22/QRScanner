@@ -122,7 +122,7 @@ export default class HomeScreen extends React.Component {
 					      }}
 				      />
 				      <Button
-					      containerViewStyle={styles.buttonContainer}
+					      containerViewStyle={[styles.buttonContainer, {bottom: 100}]}
 					      large
 					      rightIcon={{type: 'material-community',name: 'cancel'}}
 					      title='Cancel'
