@@ -72,24 +72,32 @@ export default class ShopScreen extends React.Component {
 			<View style={styles.container}>
 				<FormLabel>Name</FormLabel>
 				<FormInput
+					containerStyle={{width: '80%'}}
+					inputStyle={{paddingLeft: 10, paddingRight: 20}}
 					onChangeText={this.updateName}
 					textInputRef={'name'}
 					defaultValue={name}
 				/>
 				<FormLabel>Domain</FormLabel>
 				<FormInput
+					containerStyle={{width: '80%'}}
+					inputStyle={{paddingLeft: 10, paddingRight: 20}}
 					onChangeText={this.updateDomain}
 					textInputRef={'domain'}
 					defaultValue={domain}
 				/>
 				<FormLabel>Api Key</FormLabel>
 				<FormInput
+					containerStyle={{width: '80%'}}
+					inputStyle={{paddingLeft: 10, paddingRight: 20}}
 					onChangeText={this.updateKey}
 					textInputRef={'apiKey'}
 					defaultValue={apiKey}
 				/>
 				<FormLabel>Api password</FormLabel>
 				<FormInput
+					containerStyle={{width: '80%'}}
+					inputStyle={{paddingLeft: 10, paddingRight: 20}}
 					onChangeText={this.updatePass}
 					textInputRef={'apiPass'}
 					defaultValue={apiPass}
@@ -99,28 +107,31 @@ export default class ShopScreen extends React.Component {
 					title='Active store'
 					checked={active}
 					onPress={this.checkActive}
+					containerStyle={{backgroundColor: '#ecf0f1'}}
 				/>
-				<Button
-					title={this.props.navigation.state.params.title}
-					textStyle={{color: '#FFF'}}
-					backgroundColor={'#96be4f'}
-					icon={{name: this.props.navigation.state.params.title === 'Add store' ? 'add' : 'edit'}}
-					buttonStyle={[styles.btn, {marginTop: 20, marginBottom: 20}]}
-					onPress={this.props.navigation.state.params.title === 'Add store' ? this.handleAdd : this.handleEdit}
-				/>
-				{
-					this.props.navigation.state.params.title === 'Add store' ?
-						null
-					:
-						<Button
-							title={'Remove store'}
-							textStyle={{color: '#FFF'}}
-							backgroundColor={'#f44336'}
-							buttonStyle={styles.btn}
-							icon={{name: 'remove-circle'}}
-							onPress={this.handleRemove}
-						/>
-				}
+				<View style={styles.btnContainer}>
+					<Button
+						title={this.props.navigation.state.params.title}
+						textStyle={{color: '#FFF'}}
+						backgroundColor={'#96be4f'}
+						icon={{name: this.props.navigation.state.params.title === 'Add store' ? 'add' : 'edit'}}
+						buttonStyle={[styles.btn, {marginTop: 20, marginBottom: 20}]}
+						onPress={this.props.navigation.state.params.title === 'Add store' ? this.handleAdd : this.handleEdit}
+					/>
+					{
+						this.props.navigation.state.params.title === 'Add store' ?
+							null
+						:
+							<Button
+								title={'Remove store'}
+								textStyle={{color: '#FFF'}}
+								backgroundColor={'#f44336'}
+								buttonStyle={styles.btn}
+								icon={{name: 'remove-circle'}}
+								onPress={this.handleRemove}
+							/>
+					}
+				</View>
 			</View>
 		)
 	}
@@ -129,14 +140,20 @@ export default class ShopScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'flex-start',
+		paddingLeft: 20,
 		paddingTop: Constants.statusBarHeight,
 		backgroundColor: '#ecf0f1',
+	},
+	btnContainer: {
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	btn: {
 		height: 50,
 		marginLeft: 20,
 		marginRight: 20,
 		width: 200
-	},
+	}
 });
