@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native'
+import { StyleSheet, View, Text, FlatList, AsyncStorage, ActivityIndicator } from 'react-native'
 
 import { Constants } from 'expo'
 
@@ -13,66 +13,119 @@ export default class SettingsScreen extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      stores: [
-        {
-          name: 'tablomag',
-          domain: 'domeniu1',
-          apiKey: 'cheie',
-          apiPass: 'parola'
-        },
-	      {
-		      name: 'tablomag',
-		      domain: 'domeniu1',
-		      apiKey: 'cheie',
-		      apiPass: 'parola',
-		      active: true
-	      },
-	      {
-		      name: 'tablomag',
-		      domain: 'domeniu1',
-		      apiKey: 'cheie',
-		      apiPass: 'parola'
-	      }
-      ]
+      stores: [],
+	    isLoading: true
     }
   }
+  
+  componentDidMount() {
+	  AsyncStorage.getItem('storeData')
+		  .then( stores => {
+		  	this.setState({stores: stores ? JSON.parse(stores) : [], isLoading: false})
+		  })
+		  .catch( err => {
+			  this.setState({stores: []})
+		  })
+	}
 	
+  addShopFromAddScreen = (name, domain, apiKey, apiPass, active) => {
+	  const { stores } = this.state
+	 
+		const newStore = {
+			name, domain, apiKey, apiPass, active
+		}
+		if ( active ) {
+			for(let i = 0; i < stores.length; i++) {
+				stores[i].active = false
+			}
+		}
+	  stores.push(newStore)
+	  AsyncStorage.setItem('storeData', JSON.stringify(stores))
+		  .then( newStores => {
+			  this.setState({stores})
+		  })
+		  .catch( err => {
+			  console.log('err set', err)
+		  })
+  }
+  
 	addShop = () => {
-		this.props.navigation.navigate('Shop', {title: 'Add store'})
+		this.props.navigation.navigate('Shop', {title: 'Add store', addShopFct: this.addShopFromAddScreen})
 	}
 	
-	editShop = (name, domain, apiKey, apiPass) => {
-		this.props.navigation.navigate('Shop', {name, domain, apiKey, apiPass, title: 'Edit store'})
+	editShopFromEditScreen = (name, domain, apiKey, apiPass, active, i) => {
+		const { stores } = this.state
+		const objIndex = stores.findIndex((obj, index) => index === i)
+		if ( active ) {
+			for(let i = 0; i < stores.length; i++) {
+				stores[i].active = false
+			}
+		}
+		stores[objIndex].name = name
+		stores[objIndex].domain = domain
+		stores[objIndex].apiKey = apiKey
+		stores[objIndex].apiPass = apiPass
+		stores[objIndex].active = active
+		
+		AsyncStorage.setItem('storeData', JSON.stringify(stores))
+			.then( () => {
+				this.setState({stores})
+			})
+			.catch( err => {
+				console.log('err set', err)
+			})
 	}
 	
-	renderShop = ({item, i}) => {
+	editShop = (name, domain, apiKey, apiPass, active, i) => {
+		this.props.navigation.navigate('Shop', {name, domain, apiKey, apiPass, active, i, title: 'Edit store', editShopFct: this.editShopFromEditScreen, removeStore: this.handleRemove})
+	}
+	
+	
+	handleRemove = (i) => {
+		const { stores } = this.state
+		const objIndex = stores.findIndex((obj, index) => index === i)
+		stores.splice(objIndex, 1)
+		AsyncStorage.setItem('storeData', JSON.stringify(stores))
+			.then( () => {
+				this.setState({stores})
+			})
+	}
+	
+	renderShop = ({item, index}) => {
 		const { name, domain, apiKey, apiPass, active } = item
 		return (
 			<ListItem
 				containerStyle={{ backgroundColor: active ? '#66BB6A' : '#ecf0f1', flex: 1 }}
 				underlayColor='#7a7a7a'
-				key={i}
+				key={index}
 				title={name}
 				subtitle={domain}
 				titleStyle={styles.listItem}
 				subtitleStyle={styles.listSubtitle}
 				rightIcon={{name: 'edit'}}
-				onPress={() => this.editShop(name, domain, apiKey, apiPass)}
+				onPress={() => this.editShop(name, domain, apiKey, apiPass, active, index)}
 			/>
 		)
 	}
 
   render() {
+	  if ( this.state.isLoading ) {
+		  return (
+			  <View style={{flex: 1, paddingTop: 20}}>
+				  <ActivityIndicator />
+			  </View>
+		  )
+	  }
   	return (
 		  <View style={styles.container}>
 			  <View style={styles.headerContainer}>
 				  <Text style={{fontSize: 18, marginLeft: 20, flex: 1}}>Your shopify stores</Text>
 				  <Button
 					  containerStyle={{alignItems: 'center', flex: 1}}
-					  buttonStyle={{height: 30}}
-					  large
+					  buttonStyle={{height: 50}}
+					  textStyle={{color: '#FFF'}}
+					  backgroundColor={'#0288D1'}
 					  title='Add store'
-					  backgroundColor={'#03A9F4'}
 					  onPress={this.addShop}
 				  />
 			  </View>
@@ -80,6 +133,7 @@ export default class SettingsScreen extends React.Component {
 				  <FlatList
 					  removeClippedSubviews={false}
 					  keyboardShouldPersistTaps='always'
+					  extraData={this.state}
 					  data={this.state.stores}
 					  renderItem={this.renderShop}
 					  keyExtractor={(item, index) => index.toString()}

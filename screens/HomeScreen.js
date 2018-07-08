@@ -77,7 +77,7 @@ export default class HomeScreen extends React.Component {
 	}
 	
 	getData = code => {
-		promiseRequest('GET', Api())
+		promiseRequest('GET', Api(code))
 			.then( resp => {
 				this.setState({
 					data: resp,
@@ -106,7 +106,8 @@ export default class HomeScreen extends React.Component {
 	      }
         <Button
 	        containerViewStyle={styles.buttonContainer}
-	        large
+	        textStyle={{color: '#FFF'}}
+	        backgroundColor={'#96be4f'}
 	        rightIcon={{type: 'material-community',name: 'qrcode'}}
 	        title='Scan'
 	        onPress={this.startScanning}/>
@@ -123,7 +124,8 @@ export default class HomeScreen extends React.Component {
 				      />
 				      <Button
 					      containerViewStyle={[styles.buttonContainer, {bottom: 100}]}
-					      large
+					      textStyle={{color: '#FFF'}}
+					      backgroundColor={'#f44336'}
 					      rightIcon={{type: 'material-community',name: 'cancel'}}
 					      title='Cancel'
 					      onPress={this.cancelScan}/>
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
 	  backgroundColor: '#ecf0f1',
   },
 	buttonContainer: {
-  	height: 30,
+  	height: 50,
 		width: 100,
 		position: 'absolute',
 		alignSelf: 'center',

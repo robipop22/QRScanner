@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 
 import { Constants } from 'expo'
 
-import { FormLabel, FormInput, Button } from 'react-native-elements'
+import { FormLabel, FormInput, Button, CheckBox } from 'react-native-elements'
 
 
 export default class ShopScreen extends React.Component {
@@ -22,7 +22,9 @@ export default class ShopScreen extends React.Component {
 			name: this.props.navigation.state.params.name ? this.props.navigation.state.params.name : '',
 			domain: this.props.navigation.state.params.domain ? this.props.navigation.state.params.domain : '',
 			apiKey: this.props.navigation.state.params.apiKey ? this.props.navigation.state.params.apiKey : '',
-			apiPass: this.props.navigation.state.params.apiPass ? this.props.navigation.state.params.apiPass : ''
+			apiPass: this.props.navigation.state.params.apiPass ? this.props.navigation.state.params.apiPass : '',
+			active: this.props.navigation.state.params.active ? this.props.navigation.state.params.active : false,
+			i: typeof(this.props.navigation.state.params.i) !== 'undefined' ? this.props.navigation.state.params.i : null,
 		}
 	}
 	
@@ -42,16 +44,30 @@ export default class ShopScreen extends React.Component {
 		this.setState({apiPass})
 	}
 	
-	handleAdd = () => {
+	checkActive = () => {
+		this.setState({active: !this.state.active})
+	}
 	
+	handleAdd = () => {
+		const { name, domain, apiKey, apiPass, active } = this.state
+		this.props.navigation.state.params.addShopFct(name, domain, apiKey, apiPass, active)
+		this.props.navigation.goBack()
+	}
+	
+	handleEdit = () => {
+		const { name, domain, apiKey, apiPass, active , i} = this.state
+		this.props.navigation.state.params.editShopFct(name, domain, apiKey, apiPass, active, i)
+		this.props.navigation.goBack()
 	}
 	
 	handleRemove = () => {
-	
+		const { i } = this.state
+		this.props.navigation.state.params.removeStore(i)
+		this.props.navigation.goBack()
 	}
 	
 	render() {
-		const { name, domain, apiKey, apiPass } = this.state
+		const { name, domain, apiKey, apiPass, active } = this.state
 		return (
 			<View style={styles.container}>
 				<FormLabel>Name</FormLabel>
@@ -78,13 +94,19 @@ export default class ShopScreen extends React.Component {
 					textInputRef={'apiPass'}
 					defaultValue={apiPass}
 				/>
+				<FormLabel>Active</FormLabel>
+				<CheckBox
+					title='Active store'
+					checked={active}
+					onPress={this.checkActive}
+				/>
 				<Button
 					title={this.props.navigation.state.params.title}
 					textStyle={{color: '#FFF'}}
-					backgroundColor={'#2E7D32'}
+					backgroundColor={'#96be4f'}
 					icon={{name: this.props.navigation.state.params.title === 'Add store' ? 'add' : 'edit'}}
 					buttonStyle={[styles.btn, {marginTop: 20, marginBottom: 20}]}
-					onPress={this.handleAdd}
+					onPress={this.props.navigation.state.params.title === 'Add store' ? this.handleAdd : this.handleEdit}
 				/>
 				{
 					this.props.navigation.state.params.title === 'Add store' ?
@@ -93,7 +115,7 @@ export default class ShopScreen extends React.Component {
 						<Button
 							title={'Remove store'}
 							textStyle={{color: '#FFF'}}
-							backgroundColor={'#b71c1c'}
+							backgroundColor={'#f44336'}
 							buttonStyle={styles.btn}
 							icon={{name: 'remove-circle'}}
 							onPress={this.handleRemove}
@@ -112,7 +134,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#ecf0f1',
 	},
 	btn: {
-		height: 36,
+		height: 50,
 		marginLeft: 20,
 		marginRight: 20,
 		width: 200
