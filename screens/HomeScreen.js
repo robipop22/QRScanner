@@ -107,8 +107,7 @@ export default class HomeScreen extends React.Component {
 	getData = code => {
 		const filteredObj = this.state.stores.filter( obj => obj.active)
 		const { domain, apiKey, apiPass } = filteredObj[0]
-		// Api(domain, apiKey, apiPass, code)
-		promiseRequest('GET', 'http://profit.ecomromania.com/qrscanner?domain=tablomag.myshopify.com&api_key=61572429ffa367820116e247d72d72d1&api_password=919c510b4fd47865cb69f5a2829ca094&scan_result=00030910415')
+		promiseRequest('GET', Api(domain, apiKey, apiPass, code))
 			.then( resp => {
 				if(resp.success) {
 					this.setState({
