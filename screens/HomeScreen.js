@@ -145,6 +145,7 @@ export default class HomeScreen extends React.Component {
 	      <View style={styles.btnContainer}>
 	        <Button
 		        containerViewStyle={styles.buttonContainer}
+		        borderRadius={50}
 		        textStyle={{color: '#FFF'}}
 		        backgroundColor={'#96be4f'}
 		        rightIcon={{type: 'material-community',name: 'qrcode'}}
@@ -162,7 +163,8 @@ export default class HomeScreen extends React.Component {
 						      }}
 					      />
 					      <Button
-						      containerViewStyle={[styles.buttonContainer]}
+						      containerViewStyle={styles.buttonContainer}
+						      borderRadius={50}
 						      textStyle={{color: '#FFF'}}
 						      backgroundColor={'#f44336'}
 						      rightIcon={{type: 'material-community',name: 'cancel'}}
@@ -187,9 +189,10 @@ const styles = StyleSheet.create({
   },
 	buttonContainer: {
   	height: 50,
-		width: 100,
+		width: 200,
 		position: 'absolute',
-		bottom: 50
+		bottom: 50,
+		borderRadius: 5
 	},
 	btnContainer: {
   	flex: 1,

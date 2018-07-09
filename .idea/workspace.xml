@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dc72c253-3f6e-4999-a6c4-ee40a99c1712" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/HomeScreen.js" afterPath="$PROJECT_DIR$/screens/HomeScreen.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/index.js" afterPath="$PROJECT_DIR$/utils/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/SettingsScreen.js" afterPath="$PROJECT_DIR$/screens/SettingsScreen.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,8 +20,9 @@
       <file leaf-file-name="HomeScreen.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="137" column="33" lean-forward="true" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
+            <state relative-caret-position="1247">
+              <caret line="166" column="34" lean-forward="false" selection-start-line="166" selection-start-column="34" selection-end-line="166" selection-end-column="34" />
+              <caret line="147" column="28" lean-forward="false" selection-start-line="147" selection-start-column="28" selection-end-line="147" selection-end-column="28" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -72,8 +73,8 @@
       <file leaf-file-name="SettingsScreen.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/SettingsScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="758">
-              <caret line="158" column="2" lean-forward="false" selection-start-line="158" selection-start-column="2" selection-end-line="161" selection-end-column="4" />
+            <state relative-caret-position="1283">
+              <caret line="145" column="1" lean-forward="true" selection-start-line="145" selection-start-column="1" selection-end-line="145" selection-end-column="1" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -126,11 +127,11 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/app.json" />
         <option value="$PROJECT_DIR$/navigation/MainTabNavigator.js" />
-        <option value="$PROJECT_DIR$/screens/SettingsScreen.js" />
         <option value="$PROJECT_DIR$/screens/ShopScreen.js" />
         <option value="$PROJECT_DIR$/constants/Api.js" />
         <option value="$PROJECT_DIR$/utils/index.js" />
         <option value="$PROJECT_DIR$/screens/HomeScreen.js" />
+        <option value="$PROJECT_DIR$/screens/SettingsScreen.js" />
       </list>
     </option>
   </component>
@@ -226,12 +227,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1530982476226</updated>
-      <workItem from="1530982479474" duration="26569000" />
+      <workItem from="1530982479474" duration="27267000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26569000" />
+    <option name="totallyTimeSpent" value="27267000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
@@ -371,8 +372,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/SettingsScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="758">
-          <caret line="158" column="2" lean-forward="false" selection-start-line="158" selection-start-column="2" selection-end-line="161" selection-end-column="4" />
+        <state relative-caret-position="1283">
+          <caret line="145" column="1" lean-forward="true" selection-start-line="145" selection-start-column="1" selection-end-line="145" selection-end-column="1" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -381,8 +382,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="137" column="33" lean-forward="true" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
+        <state relative-caret-position="1247">
+          <caret line="166" column="34" lean-forward="false" selection-start-line="166" selection-start-column="34" selection-end-line="166" selection-end-column="34" />
+          <caret line="147" column="28" lean-forward="false" selection-start-line="147" selection-start-column="28" selection-end-line="147" selection-end-column="28" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>

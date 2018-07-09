@@ -100,9 +100,9 @@ export default class SettingsScreen extends React.Component {
 				key={index}
 				title={name}
 				subtitle={domain}
-				titleStyle={styles.listItem}
-				subtitleStyle={styles.listSubtitle}
-				rightIcon={{name: 'edit'}}
+				titleStyle={[styles.listItem, {color: active ? '#fff' : '#666'}]}
+				subtitleStyle={[styles.listSubtitle, {color: active ? '#fff' : '#666666CC'}]}
+				rightIcon={{name: 'edit', color: active ? '#fff' : '#666'}}
 				onPress={() => this.editShop(name, domain, apiKey, apiPass, active, index)}
 			/>
 		)
@@ -121,8 +121,9 @@ export default class SettingsScreen extends React.Component {
 			  <View style={styles.headerContainer}>
 				  <Text style={{fontSize: 18, marginLeft: 20, flex: 1}}>Your shopify stores</Text>
 				  <Button
-					  containerStyle={{alignItems: 'center', flex: 1}}
+					  containerStyle={{alignItems: 'center', flex: 1, borderRadius: 5}}
 					  buttonStyle={{height: 50}}
+					  borderRadius={50}
 					  textStyle={{color: '#FFF'}}
 					  backgroundColor={'#0288D1'}
 					  title='Add store'
@@ -157,11 +158,10 @@ const styles = StyleSheet.create({
 		marginBottom: 30
   },
 	listItem: {
-		fontSize: 16,
-		color: '#666'
+		fontSize: 18,
+		fontWeight: 'bold'
 	},
 	listSubtitle: {
-		fontSize: 14,
-		color: '#666666CC'
+		fontSize: 14
 	}
 });
