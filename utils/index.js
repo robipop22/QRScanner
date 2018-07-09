@@ -17,7 +17,9 @@ export const promiseRequest = (method, url, data = null) => {
 			},
 			body: stringifiedData
 		})
-			.then(response => response.json())
+			.then(response =>
+				response.json()
+			)
 			.then(responseJson => {
 				resolve(responseJson)
 			})

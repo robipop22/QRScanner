@@ -12,7 +12,7 @@ import { BarCodeScanner, Permissions, Constants } from 'expo'
 
 import { promiseRequest } from '../utils/index'
 
-import { Button } from 'react-native-elements'
+import { Button, ListItem } from 'react-native-elements'
 
 import Api from '../constants/Api'
 
@@ -65,18 +65,23 @@ export default class HomeScreen extends React.Component {
 		if ( order_name && products ) {
 			return (
 				<View style={{flex: 1, marginTop: 30}}>
-					<Text style={{marginBottom: 15, fontSize: 20, fontWeight: 'bold'}}>{order_name}</Text>
+					<Text style={{marginBottom: 15, fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>{order_name}</Text>
 					<View style={styles.headerContainer}>
-						<Text style={{fontSize: 16, marginLeft: 20, flex: 1, fontWeight: 'bold'}}>{customer}</Text>
-						<Text style={{fontSize: 16, marginRight: 20, fontWeight: 'bold', color: '#96be4f'}}>{order_value}</Text>
+						<Text style={{fontSize: 18, marginLeft: 35, flex: 1, fontWeight: 'bold'}}>{customer}</Text>
+						<Text style={{fontSize: 18, marginRight: 35, fontWeight: 'bold', color: '#96be4f'}}>{order_value}</Text>
 					</View>
 					{
 						products.map( (item, index) =>
-							<Text
+							<ListItem
+								containerStyle={{ marginLeft: 15, marginRight: 15 }}
+								underlayColor='#7a7a7a'
 								key={index}
-								style={{fontSize: 14}}>
-								{item.quantity} X ${item.product}
-							</Text>
+								title={`${item.quantity} X ${item.product}`}
+								subtitle={''}
+								titleStyle={styles.listItem}
+								hideChevron={true}
+								onPress={() => { return false }}
+							/>
 						)
 					}
 				</View>
@@ -93,14 +98,20 @@ export default class HomeScreen extends React.Component {
 	getData = code => {
 		const filteredObj = this.state.stores.filter( obj => obj.active)
 		const { domain, apiKey, apiPass } = filteredObj[0]
-		console.log('Api', Api(domain, apiKey, apiPass, code))
-		promiseRequest('GET', Api(domain, apiKey, apiPass, code))
+		promiseRequest('GET',  Api(domain, apiKey, apiPass, code))
 			.then( resp => {
-				console.log(resp)
-				this.setState({
-					data: resp,
-					scan: false
-				})
+				if(resp.success) {
+					this.setState({
+						data: resp,
+						scan: false
+					})
+				} else {
+					this.setState({
+						errMessage: 'No items with the requested data',
+						scan: false
+					})
+				}
+				
 			})
 			.catch( err => {
 				console.log('err', err)
@@ -125,7 +136,9 @@ export default class HomeScreen extends React.Component {
 	      }
 	      {
 	      	this.state.errMessage ?
-			      <Text>Error: this.state.errorMessage</Text>
+			      <View style={{flex: 1, marginTop: 30}}>
+				      <Text style={{marginBottom: 15, fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>{this.state.errMessage}</Text>
+			      </View>
 		      :
 			      null
 	      }
@@ -189,5 +202,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: 50,
 		marginBottom: 30
+	},
+	listItem: {
+		fontSize: 16,
+		color: '#666'
 	},
 });
