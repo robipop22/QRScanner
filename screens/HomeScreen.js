@@ -76,7 +76,16 @@ export default class HomeScreen extends React.Component {
 								containerStyle={{ marginLeft: 15, marginRight: 15 }}
 								underlayColor='#7a7a7a'
 								key={index}
-								title={`${item.quantity} X ${item.product}`}
+								title={
+									<View style={{flexDirection: 'row'}}>
+										<Text style={{fontSize: 16, color: '#666'}}>
+											{item.quantity} X {item.product}
+										</Text>
+										<Text style={{fontSize: 16, color: '#b71c1c'}}>
+											{' '} - {item.variant}
+										</Text>
+									</View>
+								}
 								subtitle={''}
 								titleStyle={styles.listItem}
 								hideChevron={true}
@@ -98,7 +107,8 @@ export default class HomeScreen extends React.Component {
 	getData = code => {
 		const filteredObj = this.state.stores.filter( obj => obj.active)
 		const { domain, apiKey, apiPass } = filteredObj[0]
-		promiseRequest('GET',  Api(domain, apiKey, apiPass, code))
+		// Api(domain, apiKey, apiPass, code)
+		promiseRequest('GET', 'http://profit.ecomromania.com/qrscanner?domain=tablomag.myshopify.com&api_key=61572429ffa367820116e247d72d72d1&api_password=919c510b4fd47865cb69f5a2829ca094&scan_result=00030910415')
 			.then( resp => {
 				if(resp.success) {
 					this.setState({
@@ -205,9 +215,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: 50,
 		marginBottom: 30
-	},
-	listItem: {
-		fontSize: 16,
-		color: '#666'
-	},
+	}
 });
