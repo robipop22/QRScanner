@@ -105,26 +105,37 @@ export default class HomeScreen extends React.Component {
 	}
 	
 	getData = code => {
-		const filteredObj = this.state.stores.filter( obj => obj.active)
-		const { domain, apiKey, apiPass } = filteredObj[0]
-		promiseRequest('GET', Api(domain, apiKey, apiPass, code))
-			.then( resp => {
-				if(resp.success) {
-					this.setState({
-						data: resp,
-						scan: false
+		AsyncStorage.getItem('storeData')
+			.then(stores => {
+				const filteredObj = stores.filter(obj => obj.active)
+				const { domain, apiKey, apiPass } = filteredObj[ 0 ]
+				promiseRequest('GET', Api(domain, apiKey, apiPass, code))
+					.then(resp => {
+						if (resp.success) {
+							this.setState({
+								data: resp,
+								scan: false
+							})
+						} else {
+							this.setState({
+								errMessage: 'No items with the requested data',
+								scan: false,
+								data: []
+							})
+						}
+
 					})
-				} else {
-					this.setState({
-						errMessage: 'No items with the requested data',
-						scan: false
+					.catch(err => {
+						console.log('err', err)
 					})
-				}
-				
 			})
-			.catch( err => {
-				console.log('err', err)
+			.catch(err => {
+				this.setState({
+					stores: [],
+					errMessage: 'No store data'
+				})
 			})
+
 	}
 
   render() {
