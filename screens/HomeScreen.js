@@ -99,7 +99,7 @@ export default class HomeScreen extends React.Component {
 			return null
 		}
 	}
-	
+
 	scanCode = result => {
 		this.getData(result.data)
 	}
@@ -107,8 +107,9 @@ export default class HomeScreen extends React.Component {
 	getData = code => {
 		AsyncStorage.getItem('storeData')
 			.then(stores => {
-				const filteredObj = stores.filter(obj => obj.active)
-				const { domain, apiKey, apiPass } = filteredObj[ 0 ]
+				const storesJson = JSON.parse(stores)
+				const filteredObj = storesJson.filter(obj => obj.active)
+				const { domain, apiKey, apiPass } = filteredObj[0]
 				promiseRequest('GET', Api(domain, apiKey, apiPass, code))
 					.then(resp => {
 						if (resp.success) {
@@ -132,7 +133,8 @@ export default class HomeScreen extends React.Component {
 			.catch(err => {
 				this.setState({
 					stores: [],
-					errMessage: 'No store data'
+					errMessage: 'No store data',
+					scan: false
 				})
 			})
 
